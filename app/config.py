@@ -5,7 +5,6 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# Load .env from project root (two levels up from this file)
 _root = Path(__file__).parent.parent
 load_dotenv(_root / ".env")
 
@@ -20,5 +19,4 @@ CANCELLATION_WINDOW_HOURS: int = int(os.getenv("CANCELLATION_WINDOW_HOURS", "24"
 TOP_K_RETRIEVAL: int = 3
 RRF_K: int = 60
 
-# Knowledge base directory
 KB_PATH: Path = Path(__file__).parent / "knowledge_base"

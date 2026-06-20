@@ -6,7 +6,7 @@ A voice AI receptionist for City General Hospital. Patients speak into their bro
 
 ## Demo
 
-[▶ Watch Demo Video](https://github.com/dharavathramdas101/AI-Front-Desk-Voice-Agent-for-Healthcare-Appointment-Booking/blob/main/demo.mp4)
+https://github.com/user-attachments/assets/0b0dd34d-b6f0-4dd0-9790-9a4b635c47e3
 
 ![AI Front Desk — booking conversation screenshot](screenshot.png)
 
@@ -126,27 +126,49 @@ Total round-trip: ~1.6 seconds  (CPU, no GPU)
 ```
 ai-front-desk/
 ├── app/
-│   ├── main.py              FastAPI app, WebSocket endpoint, session manager
-│   ├── agent.py             Intent classifier + booking agent + FAQ RAG agent
-│   ├── stt.py               openai-whisper wrapper (PCM → transcript)
-│   ├── tts.py               pyttsx3 wrapper (text → WAV chunks)
-│   ├── rag.py               HybridRetriever: ChromaDB + BM25 + RRF
-│   ├── db.py                SQLAlchemy models: Doctor, Slot, Appointment, CallLog
-│   ├── config.py            Settings from .env
-│   ├── knowledge_base/      8 markdown files (departments, doctors, FAQ, insurance…)
+│   ├── main.py                    App factory (create_app), lifespan, router mounts
+│   ├── config.py                  Settings loaded from .env
+│   ├── api/
+│   │   ├── deps.py                FastAPI dependency: get_retriever()
+│   │   └── routes/
+│   │       ├── health.py          GET / and GET /health
+│   │       └── websocket.py       WS /ws/{session_id} + SessionState + turn logic
+│   ├── models/
+│   │   └── db.py                  SQLAlchemy models: Doctor, Slot, Appointment, CallLog
+│   ├── schemas/
+│   │   └── appointment.py         Pydantic response schemas
+│   ├── services/
+│   │   ├── stt.py                 Groq Whisper STT (PCM → transcript)
+│   │   ├── tts.py                 pyttsx3 TTS (text → WAV chunks)
+│   │   ├── rag.py                 HybridRetriever: ChromaDB + BM25 + RRF
+│   │   └── agent/
+│   │       ├── prompts.py         System prompts (INTENT, BOOKING, FAQ, HARD_RULES)
+│   │       ├── tools.py           Tool schemas + DB implementations
+│   │       ├── intent.py          classify_intent()
+│   │       ├── booking.py         run_booking_agent() — tool-calling loop
+│   │       └── faq.py             run_faq_agent(), run_small_talk()
+│   ├── knowledge_base/            8 markdown files (departments, doctors, FAQ…)
 │   └── static/
-│       └── index.html       Push-to-talk UI with barge-in and latency panel
-├── scripts/
-│   ├── seed_db.py           Seed 5 doctors + 280 slots across 14 days
-│   ├── seed_rag.py          Chunk + embed knowledge base into ChromaDB
-│   └── latency_report.py   Print avg/p50/p95 latency from call logs
+│       └── index.html             Push-to-talk UI with barge-in and latency panel
 ├── tests/
-│   ├── test_intent.py       Intent classification tests
-│   ├── test_booking.py      Booking / reschedule / cancel / policy tests
-│   └── test_rag.py          Hybrid retrieval tests
-├── demo.mp4
+│   ├── unit/
+│   │   ├── test_intent.py         Intent classification tests (Groq mocked)
+│   │   └── test_rag.py            Hybrid retrieval tests (temp ChromaDB)
+│   └── integration/
+│       └── test_booking.py        Booking/reschedule/cancel tests (in-memory SQLite)
+├── scripts/
+│   ├── seed_db.py                 Seed 5 doctors + 280 slots
+│   ├── seed_rag.py                Chunk + embed knowledge base into ChromaDB
+│   └── latency_report.py          Print avg/p50/p95 latency from call logs
+├── .github/workflows/ci.yml       GitHub Actions CI
+├── Dockerfile
+├── docker-compose.yml
+├── Makefile                       make run / make seed / make test
+├── pyproject.toml
 ├── requirements.txt
+├── requirements-dev.txt
 ├── .env.example
+├── LICENSE
 └── README.md
 ```
 

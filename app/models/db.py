@@ -1,13 +1,3 @@
-"""
-SQLAlchemy models and session factory for AI Front Desk.
-
-Tables:
-  Doctor       — 5 seeded doctors across 3 departments
-  Slot         — available/booked time slots per doctor
-  Appointment  — confirmed bookings (booked/rescheduled/cancelled)
-  CallLog      — per-turn CRM record with latency breakdown
-"""
-
 from __future__ import annotations
 
 from datetime import datetime
@@ -18,19 +8,13 @@ from sqlalchemy import (
     create_engine,
 )
 from sqlalchemy.orm import (
-    DeclarativeBase, Mapped, Session, mapped_column, relationship,
-    sessionmaker,
+    DeclarativeBase, Mapped, Session, mapped_column, relationship, sessionmaker,
 )
 
-import sys, os
-sys.path.insert(0, os.path.dirname(__file__))
-import config
+from app.config import DATABASE_URL
 
 
-engine = create_engine(
-    config.DATABASE_URL,
-    connect_args={"check_same_thread": False},  # SQLite only
-)
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 
@@ -60,9 +44,7 @@ class Slot(Base):
 
     doctor: Mapped["Doctor"] = relationship(back_populates="slots")
 
-    __table_args__ = (
-        Index("ix_slots_doctor_dt", "doctor_id", "slot_datetime"),
-    )
+    __table_args__ = (Index("ix_slots_doctor_dt", "doctor_id", "slot_datetime"),)
 
 
 class Appointment(Base):
@@ -73,7 +55,7 @@ class Appointment(Base):
     phone: Mapped[str] = mapped_column(String(20))
     doctor_id: Mapped[int] = mapped_column(ForeignKey("doctors.id"))
     slot_id: Mapped[int] = mapped_column(ForeignKey("slots.id"))
-    status: Mapped[str] = mapped_column(String(20), default="booked")  # booked | rescheduled | cancelled
+    status: Mapped[str] = mapped_column(String(20), default="booked")
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     doctor: Mapped["Doctor"] = relationship(back_populates="appointments")
@@ -95,9 +77,7 @@ class CallLog(Base):
     latency_tts_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     latency_total_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
 
-    __table_args__ = (
-        Index("ix_call_logs_session", "session_id"),
-    )
+    __table_args__ = (Index("ix_call_logs_session", "session_id"),)
 
 
 def create_tables() -> None:
