@@ -16,6 +16,11 @@ DATABASE_URL: str = os.getenv("DATABASE_URL", f"sqlite:///{_root / 'ai_front_des
 WHISPER_MODEL: str = os.getenv("WHISPER_MODEL", "base")
 CANCELLATION_WINDOW_HOURS: int = int(os.getenv("CANCELLATION_WINDOW_HOURS", "24"))
 
+TWILIO_ACCOUNT_SID:  str = os.getenv("TWILIO_ACCOUNT_SID", "")
+TWILIO_AUTH_TOKEN:   str = os.getenv("TWILIO_AUTH_TOKEN", "")
+TWILIO_PHONE_NUMBER: str = os.getenv("TWILIO_PHONE_NUMBER", "")
+PUBLIC_BASE_URL:     str = os.getenv("PUBLIC_BASE_URL", "")  # e.g. https://abc.ngrok-free.app
+
 TOP_K_RETRIEVAL: int = 3
 RRF_K: int = 60
 

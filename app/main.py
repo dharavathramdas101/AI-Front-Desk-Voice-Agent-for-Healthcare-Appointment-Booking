@@ -9,7 +9,7 @@ import os
 
 from app.models.db import create_tables
 from app.services.rag import HybridRetriever
-from app.api.routes import health, websocket
+from app.api.routes import health, websocket, telephony, admin
 from app.api.routes.websocket import sessions
 
 
@@ -33,6 +33,8 @@ def create_app() -> FastAPI:
 
     app.include_router(health.router)
     app.include_router(websocket.router)
+    app.include_router(telephony.router)
+    app.include_router(admin.router)
 
     return app
 

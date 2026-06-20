@@ -76,12 +76,26 @@ class CallLog(Base):
     latency_llm_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     latency_tts_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     latency_total_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    source: Mapped[Optional[str]] = mapped_column(String(16), nullable=True, default="browser")
 
     __table_args__ = (Index("ix_call_logs_session", "session_id"),)
 
 
 def create_tables() -> None:
+    from sqlalchemy import inspect as sa_inspect, text as sa_text
     Base.metadata.create_all(bind=engine)
+    # Migrate existing DBs: add source column if not present
+    try:
+        insp = sa_inspect(engine)
+        if insp.has_table("call_logs"):
+            existing = [c["name"] for c in insp.get_columns("call_logs")]
+            if "source" not in existing:
+                with engine.begin() as conn:
+                    conn.execute(sa_text(
+                        "ALTER TABLE call_logs ADD COLUMN source TEXT DEFAULT 'browser'"
+                    ))
+    except Exception as exc:
+        print(f"[DB] migration warning: {exc}")
 
 
 def get_session() -> Session:
