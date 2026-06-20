@@ -18,9 +18,9 @@ def _seed():
     doc = Doctor(name="Dr. Test Physician", department="General Medicine", bio="Test doctor")
     session.add(doc)
     session.flush()
-    tomorrow = (datetime.now() + timedelta(days=1)).replace(hour=10, minute=0, second=0, microsecond=0)
-    slot1 = Slot(doctor_id=doc.id, slot_datetime=tomorrow, is_available=True)
-    slot2 = Slot(doctor_id=doc.id, slot_datetime=tomorrow.replace(hour=14), is_available=True)
+    future = (datetime.now() + timedelta(days=3)).replace(hour=10, minute=0, second=0, microsecond=0)
+    slot1 = Slot(doctor_id=doc.id, slot_datetime=future, is_available=True)
+    slot2 = Slot(doctor_id=doc.id, slot_datetime=future.replace(hour=14), is_available=True)
     session.add_all([slot1, slot2])
     session.commit()
     ids = doc.id, slot1.id, slot2.id
@@ -34,7 +34,7 @@ class TestCheckAvailability(unittest.TestCase):
         self.doc_id, self.slot1_id, self.slot2_id = _seed()
 
     def test_returns_available_slots(self):
-        date = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
+        date = (datetime.now() + timedelta(days=3)).strftime("%Y-%m-%d")
         result = check_availability(department="General Medicine", date=date)
         self.assertIn("slots_on_requested_date", result)
         self.assertGreater(len(result["slots_on_requested_date"]), 0)
