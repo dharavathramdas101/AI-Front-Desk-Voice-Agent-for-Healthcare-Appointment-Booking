@@ -1,9 +1,8 @@
 """
 TTS wrapper using pyttsx3.
 
-Note: Piper TTS is not installed in bespin_env2.
-pyttsx3 (2.99) is used instead — produces robotic but functional speech.
-In production, swap for ElevenLabs or Piper for natural-sounding voice.
+Note: pyttsx3 (2.99) is used for TTS — produces robotic but functional speech.
+Swap for ElevenLabs or Piper for natural-sounding voice.
 
 pyttsx3 is synchronous and COM-based on Windows. We run synthesis in a
 thread executor to avoid blocking the asyncio event loop.
