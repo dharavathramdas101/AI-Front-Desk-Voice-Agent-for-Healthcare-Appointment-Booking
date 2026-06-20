@@ -1,0 +1,33 @@
+# Core
+fastapi==0.135.1
+uvicorn[standard]==0.41.0
+python-dotenv==1.1.1
+pydantic-settings==2.9.1
+
+# LLM
+groq==1.4.0
+
+# STT — openai-whisper (faster-whisper not in env; noted in README)
+openai-whisper==20250625
+numpy>=1.24
+
+# TTS — pyttsx3 (Piper not in env; noted in README)
+pyttsx3==2.99
+
+# RAG
+chromadb==1.5.9
+rank_bm25==0.2.2
+sentence-transformers==5.5.1
+
+# Database
+sqlalchemy==2.0.50
+
+# Audio
+pyaudio==0.2.14
+
+# Latency report
+pandas>=2.0
+
+# Tests
+pytest>=8.0
+pytest-asyncio>=0.23
