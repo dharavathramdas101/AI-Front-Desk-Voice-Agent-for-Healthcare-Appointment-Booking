@@ -6,7 +6,7 @@ A voice AI receptionist for City General Hospital. Patients speak into their bro
 
 ## Demo
 
-[▶ Watch Demo Video](https://github.com/dharavathramdas101/AI-Front-Desk-Voice-Agent-for-Healthcare-Appointment-Booking/blob/main/demo.mp4(https://github.com/dharavathramdas101/AI-Front-Desk-Voice-Agent-for-Healthcare-Appointment-Booking/blob/main/demo.mp4)))
+[▶ Watch Demo Video](https://github.com/dharavathramdas101/AI-Front-Desk-Voice-Agent-for-Healthcare-Appointment-Booking/blob/main/demo.mp4)
 
 ![AI Front Desk — booking conversation screenshot](screenshot.png)
 
